@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verificación de autenticidad</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: black;
+      color: white;
+      margin-top: 50px;
+    }
+    .box {
+      border: 2px solid gold;
+      padding: 20px;
+      border-radius: 15px;
+      display: inline-block;
+    }
+    .ok {
+      color: lime;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h1 class="ok">✔ Producto original</h1>
+  <p>ID: <span id="id"></span></p>
+  <p>Escaneos: <span id="scans">0</span></p>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD9pRqLGAhEFIjueCK6PxWXFxWb_tnUBcg",
+    authDomain: "autenticidad-8dad7.firebaseapp.com",
+    projectId: "autenticidad-8dad7",
+    storageBucket: "autenticidad-8dad7.firebasestorage.app",
+    messagingSenderId: "613750291310",
+    appId: "1:613750291310:web:d6eeacf20efd1e2ee05f7f"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // 🔗 Obtener ID desde URL
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  document.getElementById("id").innerText = id;
+
+  async function contar() {
+    const ref = doc(db, "gorras", id);
+    const snap = await getDoc(ref);
+
+    if (snap.exists()) {
+      await updateDoc(ref, {
+        scans: increment(1)
+      });
+
+      const nuevo = (snap.data().scans || 0) + 1;
+      document.getElementById("scans").innerText = nuevo;
+    } else {
+      document.getElementById("scans").innerText = "ID inválido";
+    }
+  }
+
+  contar();
+</script>
+
+</body>
+</html>
