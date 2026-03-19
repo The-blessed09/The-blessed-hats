@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>The Blessed Hats</title>
+
+  <!-- Fuente extravagante -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: white;
+      color: black;
+      text-align: center;
+    }
+
+    /* 🔝 Título */
+    .header {
+      font-size: 42px;
+      font-weight: bold;
+      padding: 25px;
+    }
+
+    /* 🖼 Imagen */
+    .imagen {
+      height: 800px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .img-gorra {
+      width: 100%;
+      max-width: 1500px;
+    }
+
+    /* 🔴 Devil Magic (FUERA DEL RECUADRO) */
+    .titulo-gorra {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 40px;
+      color: red;
+      font-weight: bold;
+      text-shadow: 0 0 10px red;
+      margin-top: 20px;
+      margin-bottom: 25px;
+    }
+
+    /* 📦 Caja */
+    .box {
+      position: fixed;
+      bottom: 320px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 2px solid black;
+      border-radius: 30px;
+      padding: 60px;
+      width: 95%;
+      max-width: 650px;
+      background: white;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+    }
+
+    .ok {
+      font-size: 28px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .nombre {
+      font-size: 26px;
+      margin-bottom: 20px;
+    }
+
+    .scans {
+      font-size: 24px;
+      color: #333;
+    }
+
+    /* 💎💵 LLUVIA */
+    .lluvia {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 999;
+    }
+
+    .diamante {
+      position: absolute;
+      color: red;
+      font-size: 24px;
+      animation: caer 3s linear forwards;
+    }
+
+    .billete {
+      position: absolute;
+      color: green;
+      font-size: 24px;
+      animation: caer 3s linear forwards;
+    }
+
+    @keyframes caer {
+      0% {
+        transform: translateY(-100px);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="header">The Blessed Hats</div>
+
+<div class="imagen">
+  <img src="gorra.png" class="img-gorra">
+</div>
+
+<!-- 🔴 TEXTO FUERA DEL RECUADRO -->
+<div class="titulo-gorra">Devil Magic</div>
+
+<!-- 📦 RECUADRO -->
+<div class="box">
+  <div class="ok">✔ Autenticado por The Blessed Hats</div>
+  <div class="nombre">Gorra: <span id="nombre"></span></div>
+  <div class="scans">Escaneos: <span id="scans">0</span></div>
+</div>
+
+<!-- 💎💵 Lluvia -->
+<div class="lluvia"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD9pRqLGAhEFIjueCK6PxWXFxWb_tnUBcg",
+    authDomain: "autenticidad-8dad7.firebaseapp.com",
+    projectId: "autenticidad-8dad7",
+    storageBucket: "autenticidad-8dad7.firebasestorage.app",
+    messagingSenderId: "613750291310",
+    appId: "1:613750291310:web:d6eeacf20efd1e2ee05f7f"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  async function cargar() {
+    const ref = doc(db, "gorras", id);
+    const snap = await getDoc(ref);
+
+    if (snap.exists()) {
+      const data = snap.data();
+
+      await updateDoc(ref, {
+        scans: increment(1)
+      });
+
+      document.getElementById("scans").innerText = (data.scans || 0) + 1;
+      document.getElementById("nombre").innerText = data.nombre || "Devil Magic";
+
+    } else {
+      document.querySelector(".box").innerHTML = "<h2>ID no válido ❌</h2>";
+    }
+  }
+
+  cargar();
+</script>
+
+<script>
+  const lluvia = document.querySelector(".lluvia");
+
+  function crearElemento(tipo, simbolo) {
+    const el = document.createElement("div");
+    el.classList.add(tipo);
+    el.innerText = simbolo;
+
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.fontSize = (20 + Math.random() * 30) + "px";
+
+    lluvia.appendChild(el);
+
+    setTimeout(() => el.remove(), 3000);
+  }
+
+  let intervalo = setInterval(() => {
+    crearElemento("diamante", "💎");
+    crearElemento("billete", "💵");
+  }, 150);
+
+  setTimeout(() => clearInterval(intervalo), 3000);
+</script>
+
+</body>
+</html>
