@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Blessed Hats - Autenticidad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            width: 100%;
+            background-color: #f0f0f0;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-logo {
+            position: absolute;
+            left: 30px;
+            height: 50px;
+            width: auto;
+        }
+
+        .header-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #222;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* ===== CONTENIDO PRINCIPAL ===== */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        /* ===== PANTALLA DE ERROR ===== */
+        .error-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .error-container .error-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .error-container h2 {
+            font-size: 1.8rem;
+            color: #cc0000;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .error-container p {
+            font-size: 1rem;
+            color: #555;
+            max-width: 350px;
+            line-height: 1.6;
+        }
+
+        /* ===== IMAGEN GORRA ===== */
+        .gorra-image {
+            width: 280px;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        /* ===== TEXTO DEVIL MAGIC ===== */
+        .devil-magic-text {
+            font-family: 'Cinzel Decorative', cursive;
+            color: #cc0000;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 2px rgba(204, 0, 0, 0.3);
+        }
+
+        /* ===== RECUADRO INFO ===== */
+        .info-box {
+            width: 100%;
+            background-color: #ffffff;
+            border: 2px solid #222;
+            border-radius: 12px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        /* ===== ALERTA CLONACIÓN ===== */
+        .clone-alert {
+            display: none;
+            background-color: #ff4444;
+            color: #ffffff;
+            text-align: center;
+            padding: 12px 15px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+
+        .clone-alert .alert-icon {
+            margin-right: 6px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
+        }
+
+        .info-content {
+            padding: 25px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .info-value {
+            font-weight: 700;
+            color: #222;
+            font-size: 0.95rem;
+            text-align: right;
+        }
+
+        .authentic-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .scan-count-value {
+            background-color: #f5f5f5;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-family: 'Poppins', monospace;
+            font-weight: 700;
+            color: #222;
+        }
+
+        /* ===== LOADING ===== */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #eee;
+            border-top: 4px solid #cc0000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-container p {
+            color: #777;
+            font-size: 0.95rem;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.75rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            .header {
+                padding: 12px 15px;
+            }
+
+            .header-logo {
+                left: 15px;
+                height: 40px;
+            }
+
+            .header-title {
+                font-size: 1.1rem;
+                letter-spacing: 2px;
+                margin-left: 50px;
+            }
+
+            .gorra-image {
+                width: 240px;
+            }
+
+            .devil-magic-text {
+                font-size: 1.8rem;
+            }
+
+            .info-content {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <img src="logo.png" alt="The Blessed Hats Logo" class="header-logo">
+        <span class="header-title">The Blessed Hats</span>
+    </div>
+
+    <!-- LOADING -->
+    <div class="main-content" id="loadingScreen">
+        <div class="loading-container">
+            <div class="spinner"></div>
+            <p>Verificando autenticidad...</p>
+        </div>
+    </div>
+
+    <!-- ERROR -->
+    <div class="main-content error-container" id="errorScreen">
+        <div class="error-icon">🚫</div>
+        <h2>Producto No Encontrado</h2>
+        <p>El ID proporcionado no corresponde a ningún producto auténtico de The Blessed Hats. Este producto podría ser falsificado.</p>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-content" id="mainContent" style="display:none;">
+        <img src="gorra.png" alt="Gorra Devil Magic" class="gorra-image">
+
+        <div class="devil-magic-text">Devil Magic</div>
+
+        <div class="info-box">
+            <!-- Alerta de clonación -->
+            <div class="clone-alert" id="cloneAlert">
+                <span class="alert-icon">⚠️</span> POSIBLE CLONACIÓN
+            </div>
+
+            <div class="info-content">
+                <div class="info-row">
+                    <span class="info-label">Drop</span>
+                    <span class="info-value">Blessed Deity</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Modelo</span>
+                    <span class="info-value">Devil Magic</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Serie</span>
+                    <span class="info-value" id="serieValue">--/04</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Estado</span>
+                    <span class="info-value">
+                        <span class="authentic-badge">
+                            ✅ Producto Auténtico
+                        </span>
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Escaneos</span>
+                    <span class="info-value">
+                        <span class="scan-count-value" id="scanCount">0</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            &copy; 2024 The Blessed Hats. Todos los derechos reservados.
+        </div>
+    </div>
+
+    <!-- FIREBASE (versión CDN compatible) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        // ===== CONFIGURACIÓN FIREBASE =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9pRqLGAhEFIjueCK6PxWXFxWb_tnUBcg",
+            authDomain: "autenticidad-8dad7.firebaseapp.com",
+            projectId: "autenticidad-8dad7",
+            storageBucket: "autenticidad-8dad7.firebasestorage.app",
+            messagingSenderId: "613750291310",
+            appId: "1:613750291310:web:d6eeacf20efd1e2ee05f7f",
+            databaseURL: "https://autenticidad-8dad7-default-rtdb.firebaseio.com"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // ===== IDs VÁLIDOS Y SU SERIE =====
+        const validCaps = {
+            "TBH01DM": "01/04",
+            "TBH02DM": "02/04",
+            "TBH03DM": "03/04",
+            "TBH04DM": "04/04"
+        };
+
+        // ===== OBTENER ID DESDE LA URL =====
+        function getCapIdFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get("id");
+        }
+
+        // ===== LÓGICA PRINCIPAL =====
+        async function init() {
+            const capId = getCapIdFromURL();
+            const loadingScreen = document.getElementById("loadingScreen");
+            const errorScreen = document.getElementById("errorScreen");
+            const mainContent = document.getElementById("mainContent");
+
+            // Simular pequeña carga para UX
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            // Ocultar loading
+            loadingScreen.style.display = "none";
+
+            // Verificar si el ID es válido
+            if (!capId || !validCaps.hasOwnProperty(capId)) {
+                errorScreen.style.display = "flex";
+                return;
+            }
+
+            // ID válido: mostrar contenido
+            mainContent.style.display = "flex";
+
+            // Establecer serie
+            document.getElementById("serieValue").textContent = validCaps[capId];
+
+            // Referencia en Firebase: gorras/{id}/escaneos
+            const scanRef = database.ref("gorras/" + capId + "/escaneos");
+
+            try {
+                // Usar transacción para incrementar atómicamente
+                await scanRef.transaction(function(currentValue) {
+                    return (currentValue || 0) + 1;
+                }, function(error, committed, snapshot) {
+                    if (error) {
+                        console.error("Error en transacción:", error);
+                        document.getElementById("scanCount").textContent = "Error";
+                    } else if (committed && snapshot) {
+                        const count = snapshot.val();
+                        document.getElementById("scanCount").textContent = count;
+
+                        // Mostrar alerta si >= 20 escaneos
+                        if (count >= 20) {
+                            document.getElementById("cloneAlert").style.display = "block";
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Error conectando con Firebase:", error);
+                document.getElementById("scanCount").textContent = "Error";
+            }
+        }
+
+        // ===== INICIAR =====
+        init();
+    </script>
+
+</body>
+</html>
